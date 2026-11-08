@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>EasyFits | See clothes on your body before you buy</title>
+	<meta name="description" content="EasyFits is a 3D wardrobe app: scan your body and your clothes, then try on outfits in 3D before you get dressed or buy online.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+	<style>
+		/* Same colours and fonts as the EasyFits Fiki */
+		:root {
+			--bg: #eef2ee; --surface: #fff; --ink: #1c261f; --muted: #5b685f; --line: #d5ddd6;
+			--sage: #557362; --sage-dark: #3f5c4c; --sage-soft: #e1eae3; --tape: #f2c94c;
+			--display: 'Bricolage Grotesque', Georgia, sans-serif;
+			--body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+			color-scheme: light;
+		}
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); }
+		h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; letter-spacing: -.02em; }
+		p { margin: 0; }
+		.wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+		:focus-visible { outline: 3px solid var(--sage-dark); outline-offset: 3px; }
+
+		/* Top bar */
+		.bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+		.logo { font: 800 1.5rem var(--display); color: var(--ink); text-decoration: none; letter-spacing: -.02em; }
+		.bar a.link { color: var(--muted); font-weight: 600; text-decoration: none; }
+		.bar a.link:hover { color: var(--ink); }
+
+		/* Hero: everything the 5-second test needs is in here */
+		.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 32px 0 72px; }
+		.eyebrow { display: inline-block; background: var(--sage-soft); color: var(--sage-dark); font-weight: 600; font-size: .95rem; padding: 4px 14px; border-radius: 99px; margin-bottom: 18px; }
+		.hero h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 800; }
+		.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--tape) 62%); }
+		.hero .lead { font-size: 1.2rem; color: var(--muted); margin-top: 20px; max-width: 34em; }
+		.cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 32px; background: var(--ink); color: #fff; text-decoration: none; font-weight: 600; padding: 15px 26px; border-radius: 14px; }
+		.cta:hover { background: var(--sage-dark); }
+
+		/* Phone mock-up showing the product */
+		.phone { justify-self: center; width: 300px; aspect-ratio: 9 / 18.5; background: var(--ink); border-radius: 44px; padding: 12px; box-shadow: 0 30px 60px -20px rgba(28, 38, 31, .45); }
+		.screen { height: 100%; background: var(--surface); border-radius: 34px; overflow: hidden; display: flex; flex-direction: column; padding: 34px 18px 18px; }
+		.screen .hi { font-size: .8rem; color: var(--muted); }
+		.screen .q { font: 800 1.15rem var(--display); margin-top: 2px; }
+		.stage { flex: 1; margin-top: 12px; border-radius: 20px; background: var(--sage); display: grid; place-items: center; position: relative; }
+		.stage svg { width: 78%; }
+		.stage .tag360 { position: absolute; top: 10px; right: 12px; background: var(--tape); color: var(--ink); font: 800 .75rem var(--display); padding: 2px 8px; border-radius: 6px; }
+		.fig .body { fill: #fff; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+		.fig .shirt { fill: var(--tape); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+		.fig .ring { fill: none; stroke: var(--tape); stroke-width: 3; stroke-dasharray: 10 7; animation: spin 6s linear infinite; }
+		.fig .back { stroke-opacity: .4; }
+		@keyframes spin { to { stroke-dashoffset: -34; } }
+		.item { margin-top: 12px; border: 1.5px solid var(--line); border-radius: 16px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; }
+		.item .sw { width: 38px; height: 38px; border-radius: 10px; background: var(--tape); flex: none; }
+		.item b { display: block; font-size: .85rem; }
+		.item span { font-size: .75rem; color: var(--muted); }
+		.item .fit { margin-left: auto; background: var(--sage-soft); color: var(--sage-dark); font-weight: 600; font-size: .75rem; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+
+		/* Tape-measure strip, as on the Fiki */
+		.tape { height: 30px; background:
+			repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 12px) bottom/100% 9px no-repeat,
+			repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 60px) bottom/100% 16px no-repeat,
+			var(--tape); }
+
+		/* Sections */
+		section { padding: 80px 0 0; }
+		.kicker { color: var(--sage); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; }
+		section h2 { font-size: clamp(2rem, 4.5vw, 2.8rem); font-weight: 800; margin-top: 8px; max-width: 18em; }
+		.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
+		.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 26px; }
+		.card h3 { font-size: 1.35rem; margin-bottom: 8px; }
+		.card p { color: var(--muted); }
+
+		.stat b { display: block; font: 800 3rem var(--display); color: var(--sage); line-height: 1; margin-bottom: 10px; }
+		.source { color: var(--muted); font-size: .9rem; margin-top: 14px; }
+
+		.step .n { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--tape); font: 800 1.1rem var(--display); margin-bottom: 16px; }
+
+		.features { grid-template-columns: repeat(2, 1fr); }
+
+		.trust { margin-top: 80px; background: var(--sage); color: #fff; border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+		.trust h3 { font-size: 1.5rem; margin-bottom: 8px; }
+		.trust p { color: #e6efe9; }
+
+		footer { margin-top: 80px; padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; text-align: center; }
+
+		@media (max-width: 860px) {
+			.hero { grid-template-columns: 1fr; gap: 40px; padding-top: 8px; }
+			.grid, .features, .trust { grid-template-columns: 1fr; }
+			.trust { padding: 28px; }
+		}
+		@media (max-width: 380px) { .phone { width: 260px; } }
+		@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .fig .ring { animation: none; } }
+	</style>
+</head>
+<body>
+
+<div class="wrap">
+	<header class="bar">
+		<a class="logo" href="#">EasyFits</a>
+		<a class="link" href="#how">How it works</a>
+	</header>
+
+	<main>
+		<div class="hero">
+			<div>
+				<span class="eyebrow">A 3D wardrobe app</span>
+				<h1>See clothes on <em>your</em> body before you buy them.</h1>
+				<p class="lead">Scan your body and the clothes you own. EasyFits builds them in 3D, so you can try on outfits from your wardrobe or from online stores, without changing clothes.</p>
+				<a class="cta" href="#how">See how it works <span aria-hidden="true">&darr;</span></a>
+			</div>
+
+			<div class="phone" role="img" aria-label="The EasyFits app showing a 3D model of the user wearing a shirt from an online store, with a note that size M fits and it matches 4 items they own">
+				<div class="screen" aria-hidden="true">
+					<p class="hi">Good morning</p>
+					<p class="q">What are we wearing today?</p>
+					<div class="stage">
+						<span class="tag360">360°</span>
+						<svg class="fig" viewBox="0 0 200 250">
+							<defs><clipPath id="front"><rect x="0" y="112" width="200" height="60"/></clipPath></defs>
+							<ellipse class="ring back" cx="100" cy="112" rx="88" ry="22"/>
+							<path class="body" d="M100 30c-8 0-12 6-12 14 0 6 3 9 3 12-14 4-38 10-44 22-2 4 0 8 4 10l20-4c0 30-4 52-6 70 10 6 26 9 35 9s25-3 35-9c-2-18-6-40-6-70l20 4c4-2 6-6 4-10-6-12-30-18-44-22 0-3 3-6 3-12 0-8-4-14-12-14z"/>
+							<path class="shirt" d="M91 56c-14 4-38 10-44 22-2 4 0 8 4 10l20-4c0 14-1 26-2 36 10 4 21 6 31 6s21-2 31-6c-1-10-2-22-2-36l20 4c4-2 6-6 4-10-6-12-30-18-44-22-2 5-5 8-9 8s-7-3-9-8z"/>
+							<path class="body" d="M100 179v50M74 234h52"/>
+							<ellipse class="ring" clip-path="url(#front)" cx="100" cy="112" rx="88" ry="22"/>
+						</svg>
+					</div>
+					<div class="item">
+						<span class="sw"></span>
+						<div><b>Linen shirt</b><span>From an online store</span></div>
+						<span class="fit">Size M fits</span>
+					</div>
+					<div class="item">
+						<span class="sw" style="background: var(--sage)"></span>
+						<div><b>Goes with 4 items</b><span>Already in your wardrobe</span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
+
+<div class="tape" aria-hidden="true"></div>
+
+<div class="wrap">
+
+	<section id="problem">
+		<p class="kicker">Sound familiar?</p>
+		<h2>Choosing clothes is still a guess.</h2>
+		<div class="grid">
+			<div class="card stat"><b>88%</b><p>put off online orders because they don't know the size, how it looks on them, or what it goes with.</p></div>
+			<div class="card stat"><b>83%</b><p>found a piece in their wardrobe that they had completely forgotten about.</p></div>
+			<div class="card stat"><b>64%</b><p>often ask themselves "do I have anything to wear this with?" when they see new clothes.</p></div>
+		</div>
+		<p class="source">From our survey of 64 people, 2026.</p>
+	</section>
+
+	<section id="how">
+		<p class="kicker">How it works</p>
+		<h2>Your wardrobe, in 3D, in three steps.</h2>
+		<div class="grid">
+			<div class="card step"><span class="n">1</span><h3>Build your model</h3><p>Scan your body with your phone, or just enter your sizes.</p></div>
+			<div class="card step"><span class="n">2</span><h3>Scan your clothes</h3><p>Hold a piece in front of the camera and turn it around. It joins your wardrobe in 3D.</p></div>
+			<div class="card step"><span class="n">3</span><h3>Try on outfits</h3><p>Mix your pieces on your 3D model and look at them from every side.</p></div>
+		</div>
+	</section>
+
+	<section id="features">
+		<p class="kicker">What you can do</p>
+		<h2>Get dressed and shop with confidence.</h2>
+		<div class="grid features">
+			<div class="card"><h3>Try before you buy</h3><p>See how a piece from an online store fits your body before you order it, and return less.</p></div>
+			<div class="card"><h3>See it with what you own</h3><p>Check what a new piece goes with in your wardrobe before you buy it.</p></div>
+			<div class="card"><h3>Never forget a piece</h3><p>All your clothes in one place, sorted by category and season, like your real wardrobe.</p></div>
+			<div class="card"><h3>Build outfits in seconds</h3><p>Pick a top, bottoms and shoes, and see the whole outfit on you without changing clothes.</p></div>
+		</div>
+	</section>
+
+	<div class="trust">
+		<div><h3>Real scans, not AI-generated pictures</h3><p>What you see is built from scans of your body and your clothes, so it stays true to the real thing.</p></div>
+		<div><h3>Your scans stay yours</h3><p>You decide what is stored, and you can delete your scans at any time.</p></div>
+	</div>
+
+</div>
+
+<footer><div class="wrap">EasyFits &middot; 2026</div></footer>
+
+</body>
+</html>
