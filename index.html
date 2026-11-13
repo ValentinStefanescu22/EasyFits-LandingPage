@@ -3,142 +3,211 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-	<title>EasyFits | See clothes on your body before you buy</title>
-	<meta name="description" content="EasyFits is a 3D wardrobe app: scan your body and your clothes, then try on outfits in 3D before you get dressed or buy online.">
+	<title>EasyFits | Try on clothes directly from your phone</title>
+	<meta name="description" content="EasyFits is a 3D wardrobe app. Scan your body and clothes once, then try on any outfit in 3D. Get notified when it launches.">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap">
 	<style>
 		/* Same colours and fonts as the EasyFits Fiki */
 		:root {
 			--bg: #eef2ee; --surface: #fff; --ink: #1c261f; --muted: #5b685f; --line: #d5ddd6;
 			--sage: #557362; --sage-dark: #3f5c4c; --sage-soft: #e1eae3; --tape: #f2c94c;
-			--display: 'Bricolage Grotesque', Georgia, sans-serif;
-			--body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+			--display: 'Gloock', Georgia, serif;
+			--body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
 			color-scheme: light;
 		}
 		* { box-sizing: border-box; }
 		html { scroll-behavior: smooth; }
 		body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); }
-		h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; letter-spacing: -.02em; }
+		h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.08; margin: 0; letter-spacing: -.01em; }
+		body { font-synthesis: none; }
 		p { margin: 0; }
-		.wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+		button { font-family: inherit; }
+		.wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 		:focus-visible { outline: 3px solid var(--sage-dark); outline-offset: 3px; }
 
-		/* Top bar */
-		.bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
-		.logo { font: 800 1.5rem var(--display); color: var(--ink); text-decoration: none; letter-spacing: -.02em; }
-		.bar a.link { color: var(--muted); font-weight: 600; text-decoration: none; }
-		.bar a.link:hover { color: var(--ink); }
+		/* ===== First screen (phone first: everything fits without scrolling) ===== */
+		.first { display: flex; flex-direction: column; height: 100vh; height: 100svh; min-height: 560px; }
+		.bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 10px; }
+		.logo { font: 400 1.4rem var(--display); letter-spacing: -.01em; }
+		.soon { background: var(--sage-soft); color: var(--sage-dark); font-weight: 700; font-size: .8rem; padding: 4px 12px; border-radius: 99px; }
 
-		/* Hero: everything the 5-second test needs is in here */
-		.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 32px 0 72px; }
-		.eyebrow { display: inline-block; background: var(--sage-soft); color: var(--sage-dark); font-weight: 600; font-size: .95rem; padding: 4px 14px; border-radius: 99px; margin-bottom: 18px; }
-		.hero h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 800; }
-		.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--tape) 62%); }
-		.hero .lead { font-size: 1.2rem; color: var(--muted); margin-top: 20px; max-width: 34em; }
-		.cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 32px; background: var(--ink); color: #fff; text-decoration: none; font-weight: 600; padding: 15px 26px; border-radius: 14px; }
-		.cta:hover { background: var(--sage-dark); }
+		.hero { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding-bottom: 14px; }
+		.hero h1 { font-size: clamp(2rem, 8.8vw, 2.7rem); }
+		.bubbles { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
+		.bubbles li { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 99px; padding: 4px 12px 4px 8px; font-weight: 700; font-size: .88rem; }
+		.bubbles svg { width: 18px; height: 18px; fill: none; stroke: var(--sage-dark); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+		.cta { display: flex; justify-content: center; align-items: center; gap: 10px; background: var(--tape); color: var(--ink); text-decoration: none; font: 800 1.05rem var(--body); padding: 15px 26px; border-radius: 14px; border: 0; cursor: pointer; box-shadow: inset 0 0 0 1.5px rgba(28, 38, 31, .12), 0 10px 24px -10px rgba(214, 160, 20, .9); transition: transform .15s, box-shadow .15s, background .15s; }
+		.cta:hover { background: #ffd65c; transform: translateY(-1px); box-shadow: inset 0 0 0 1.5px rgba(28, 38, 31, .12), 0 14px 28px -10px rgba(214, 160, 20, 1); }
+		.cta:active { transform: translateY(0); }
+		.cta span { transition: transform .15s; }
+		.cta:hover span { transform: translateX(3px); }
 
-		/* Phone mock-up showing the product */
-		.phone { justify-self: center; width: 300px; aspect-ratio: 9 / 18.5; background: var(--ink); border-radius: 44px; padding: 12px; box-shadow: 0 30px 60px -20px rgba(28, 38, 31, .45); }
-		.screen { height: 100%; background: var(--surface); border-radius: 34px; overflow: hidden; display: flex; flex-direction: column; padding: 34px 18px 18px; }
-		.screen .hi { font-size: .8rem; color: var(--muted); }
-		.screen .q { font: 800 1.15rem var(--display); margin-top: 2px; }
-		.stage { flex: 1; margin-top: 12px; border-radius: 20px; background: var(--sage); display: grid; place-items: center; position: relative; }
-		.stage svg { width: 78%; }
-		.stage .tag360 { position: absolute; top: 10px; right: 12px; background: var(--tape); color: var(--ink); font: 800 .75rem var(--display); padding: 2px 8px; border-radius: 6px; }
-		.fig .body { fill: #fff; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
-		.fig .shirt { fill: var(--tape); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
-		.fig .ring { fill: none; stroke: var(--tape); stroke-width: 3; stroke-dasharray: 10 7; animation: spin 6s linear infinite; }
-		.fig .back { stroke-opacity: .4; }
-		@keyframes spin { to { stroke-dashoffset: -34; } }
-		.item { margin-top: 12px; border: 1.5px solid var(--line); border-radius: 16px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; }
-		.item .sw { width: 38px; height: 38px; border-radius: 10px; background: var(--tape); flex: none; }
-		.item b { display: block; font-size: .85rem; }
-		.item span { font-size: .75rem; color: var(--muted); }
-		.item .fit { margin-left: auto; background: var(--sage-soft); color: var(--sage-dark); font-weight: 600; font-size: .75rem; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+		/* Demo card */
+		.demo { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+		.screen { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+		.stage { position: relative; flex: 1; min-height: 170px; background: radial-gradient(120% 90% at 50% 30%, #8ca594 0%, var(--sage) 58%, #44604f 100%); cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+		.stage:active { cursor: grabbing; }
+		.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+		.stage .label, .stage .tag360 { position: absolute; top: 10px; font-weight: 700; font-size: .72rem; padding: 3px 9px; border-radius: 99px; }
+		.stage .label { left: 10px; background: rgba(255, 255, 255, .92); color: var(--ink); }
+		.stage .tag360 { right: 10px; background: var(--tape); color: var(--ink); font-family: var(--display); }
+		.stage .hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, .92); font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; white-space: nowrap; transition: opacity .4s; pointer-events: none; }
+		.stage.used .hint { opacity: 0; }
+		.stage.nogl::after { content: "3D preview needs WebGL"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-weight: 600; }
 
-		/* Tape-measure strip, as on the Fiki */
+		.panel { padding: 10px 10px 8px; }
+		.tabs { display: flex; gap: 2px; padding: 3px; background: var(--sage-soft); border-radius: 12px; }
+		.tabs button { flex: 1; height: 30px; border: 0; background: none; border-radius: 9px; font-weight: 700; font-size: .82rem; color: var(--muted); cursor: pointer; }
+		.tabs button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(28, 38, 31, .18); }
+		.row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+		.picks { flex: 1; display: flex; gap: 6px; min-width: 0; }
+		.pick { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 5px 6px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 11px; font-weight: 700; font-size: .7rem; line-height: 1.15; color: var(--ink); cursor: pointer; text-align: left; }
+		.pick i { flex: none; width: 20px; height: 20px; border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgba(28, 38, 31, .25); }
+		.pick[aria-pressed="true"] { border-color: var(--ink); background: var(--sage-soft); }
+		.sizes { display: flex; gap: 2px; padding: 3px; background: var(--sage-soft); border-radius: 11px; }
+		.sizes button { min-width: 32px; height: 28px; padding: 0 6px; border: 0; background: none; border-radius: 8px; font-weight: 700; font-size: .78rem; color: var(--muted); cursor: pointer; }
+		.sizes button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(28, 38, 31, .18); }
+		.sizes.off { visibility: hidden; }
+		.fit { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-weight: 700; font-size: .76rem; white-space: nowrap; }
+		.fit::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+		.fit.good { background: #dcefe2; color: #2c6b43; }
+		.fit.tight { background: #fbe0dc; color: #a3392b; }
+		.fit.loose { background: #fbf0cc; color: #8a6a00; }
+		.fit.own { background: var(--sage-soft); color: var(--sage-dark); }
+		.note { margin-top: 7px; font-size: .68rem; line-height: 1.35; color: var(--muted); }
+
+		/* Bigger screens: text left, the demo in a phone frame on the right */
+		@media (min-width: 861px) {
+			.first { height: auto; min-height: 0; }
+			.bar { padding: 22px 0; }
+			.hero { display: grid; grid-template-columns: 1.1fr .9fr; grid-template-areas: "pitch demo" "act demo"; column-gap: 48px; row-gap: 30px; padding: 36px 0 76px; }
+			.pitch { grid-area: pitch; align-self: end; }
+			.act { grid-area: act; align-self: start; }
+			.act .cta { display: inline-flex; }
+			.hero h1 { font-size: clamp(2.8rem, 5.6vw, 4.4rem); }
+			.bubbles { gap: 10px; margin-top: 22px; }
+			.bubbles li { font-size: 1.02rem; padding: 7px 16px 7px 12px; }
+			.bubbles svg { width: 22px; height: 22px; }
+			.demo { grid-area: demo; justify-self: center; position: relative; width: 340px; background: var(--ink); border-radius: 50px; padding: 11px; box-shadow: 0 40px 80px -30px rgba(28, 38, 31, .6), inset 0 0 0 2px #3a463e; }
+			.demo::before { content: ""; position: absolute; z-index: 2; top: 22px; left: 50%; width: 92px; height: 24px; margin-left: -46px; background: var(--ink); border-radius: 99px; }
+			.screen { border: 0; border-radius: 40px; }
+			.stage { flex: none; height: 400px; }
+			.stage .label, .stage .tag360 { top: 52px; }
+			.stage .label { left: 16px; }
+			.stage .tag360 { right: 16px; }
+			.panel { padding: 12px 14px 16px; }
+		}
+
 		.tape { height: 30px; background:
 			repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 12px) bottom/100% 9px no-repeat,
 			repeating-linear-gradient(90deg, var(--ink) 0 1.5px, transparent 1.5px 60px) bottom/100% 16px no-repeat,
 			var(--tape); }
 
-		/* Sections */
-		section { padding: 80px 0 0; }
-		.kicker { color: var(--sage); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; }
-		section h2 { font-size: clamp(2rem, 4.5vw, 2.8rem); font-weight: 800; margin-top: 8px; max-width: 18em; }
-		.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
-		.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 26px; }
-		.card h3 { font-size: 1.35rem; margin-bottom: 8px; }
-		.card p { color: var(--muted); }
+		/* ===== Sections: same cards, pills and sage stage as the demo ===== */
+		section { padding: 56px 0 0; }
+		section h2 { font-size: clamp(1.8rem, 7vw, 2.7rem); }
+		.kicker { display: inline-block; background: var(--sage-soft); color: var(--sage-dark); font-weight: 700; font-size: .8rem; padding: 4px 12px; border-radius: 99px; margin-bottom: 10px; }
 
-		.stat b { display: block; font: 800 3rem var(--display); color: var(--sage); line-height: 1; margin-bottom: 10px; }
-		.source { color: var(--muted); font-size: .9rem; margin-top: 14px; }
+		.stats { display: grid; gap: 10px; margin-top: 20px; }
+		.stat { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 14px 18px; }
+		.stat b { flex: none; min-width: 3.1ch; font: 400 2.6rem var(--display); color: var(--sage-dark); line-height: 1; letter-spacing: -.02em; }
+		.stat p { font-weight: 700; line-height: 1.3; }
+		.source { color: var(--muted); font-size: .8rem; margin-top: 10px; }
 
-		.step .n { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--tape); font: 800 1.1rem var(--display); margin-bottom: 16px; }
+		/* Steps scroll sideways on phones, like app cards */
+		.steps { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; margin: 20px -16px 0; padding: 0 16px 6px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+		.steps::-webkit-scrollbar { display: none; }
+		.step { scroll-snap-align: start; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+		.step .art { display: grid; place-items: center; height: 170px; background: radial-gradient(120% 90% at 50% 30%, #8ca594 0%, var(--sage) 58%, #44604f 100%); }
+		.step .art svg { width: 190px; height: 140px; }
+		.step .cap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+		.step .n { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--tape); font: 400 1rem var(--display); }
+		.step h3 { font-size: 1.2rem; }
+		.swipe { color: var(--muted); font-size: .8rem; margin-top: 8px; }
+		.ill .ln { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+		.ill .wh { fill: #fff; }
+		.ill .yl { fill: var(--tape); }
+		.ill .scan { stroke: var(--tape); stroke-width: 3; stroke-linecap: round; animation: scan 2.4s ease-in-out infinite alternate; }
+		@keyframes scan { from { transform: translateY(-34px); } to { transform: translateY(34px); } }
+		.ill .spin { animation: dash 4s linear infinite; }
+		@keyframes dash { to { stroke-dashoffset: -34; } }
 
-		.features { grid-template-columns: repeat(2, 1fr); }
+		/* Sign-up */
+		.signup { margin-top: 56px; background: radial-gradient(120% 100% at 50% 0%, #8ca594 0%, var(--sage) 55%, #44604f 100%); color: #fff; border-radius: 28px; padding: 40px 20px; text-align: center; }
+		.signup .kicker { background: rgba(255, 255, 255, .16); color: #fff; }
+		.signup h2 { color: #fff; }
+		.signup > p { color: #e6efe9; font-size: 1.05rem; margin-top: 8px; }
+		.signup form { display: flex; flex-direction: column; gap: 10px; max-width: 480px; margin: 22px auto 0; }
+		.signup input { min-width: 0; height: 56px; border: 0; border-radius: 14px; padding: 0 18px; font: 500 1rem var(--body); color: var(--ink); }
+		.signup .cta { height: 56px; }
+		.signup .msg { font-weight: 600; margin-top: 12px; min-height: 1.6em; }
+		.badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding: 0; list-style: none; }
+		.badges li { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, .14); padding: 5px 12px 5px 9px; border-radius: 99px; font-weight: 600; font-size: .85rem; }
+		.badges svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-		.trust { margin-top: 80px; background: var(--sage); color: #fff; border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-		.trust h3 { font-size: 1.5rem; margin-bottom: 8px; }
-		.trust p { color: #e6efe9; }
-
-		footer { margin-top: 80px; padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; text-align: center; }
-
-		@media (max-width: 860px) {
-			.hero { grid-template-columns: 1fr; gap: 40px; padding-top: 8px; }
-			.grid, .features, .trust { grid-template-columns: 1fr; }
-			.trust { padding: 28px; }
+		@media (min-width: 560px) { .signup form { flex-direction: row; } .signup input { flex: 1; } }
+		@media (min-width: 861px) {
+			section { padding-top: 88px; }
+			.stats { grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+			.stat { flex-direction: column; align-items: flex-start; gap: 10px; padding: 24px; }
+			.stat b { font-size: 3.4rem; }
+			.steps { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0 0; padding: 0; overflow: visible; }
+			.swipe { display: none; }
+			.signup { margin-top: 88px; padding: 56px 24px; }
 		}
-		@media (max-width: 380px) { .phone { width: 260px; } }
-		@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .fig .ring { animation: none; } }
+
+		footer { margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; text-align: center; }
+
+		@media (prefers-reduced-motion: reduce) {
+			html { scroll-behavior: auto; }
+			.ill .scan, .ill .spin { animation: none; }
+		}
 	</style>
 </head>
 <body>
 
-<div class="wrap">
-	<header class="bar">
-		<a class="logo" href="#">EasyFits</a>
-		<a class="link" href="#how">How it works</a>
-	</header>
+<div class="first wrap">
+	<header class="bar"><span class="logo">EasyFits</span><span class="soon">Coming soon</span></header>
 
-	<main>
-		<div class="hero">
-			<div>
-				<span class="eyebrow">A 3D wardrobe app</span>
-				<h1>See clothes on <em>your</em> body before you buy them.</h1>
-				<p class="lead">Scan your body and the clothes you own. EasyFits builds them in 3D, so you can try on outfits from your wardrobe or from online stores, without changing clothes.</p>
-				<a class="cta" href="#how">See how it works <span aria-hidden="true">&darr;</span></a>
-			</div>
+	<main class="hero">
+		<div class="pitch">
+			<h1>Try on clothes directly from your phone.</h1>
+			<ul class="bubbles">
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>Real 3D</li>
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg>Fast</li>
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Private</li>
+			</ul>
+		</div>
 
-			<div class="phone" role="img" aria-label="The EasyFits app showing a 3D model of the user wearing a shirt from an online store, with a note that size M fits and it matches 4 items they own">
-				<div class="screen" aria-hidden="true">
-					<p class="hi">Good morning</p>
-					<p class="q">What are we wearing today?</p>
-					<div class="stage">
-						<span class="tag360">360°</span>
-						<svg class="fig" viewBox="0 0 200 250">
-							<defs><clipPath id="front"><rect x="0" y="112" width="200" height="60"/></clipPath></defs>
-							<ellipse class="ring back" cx="100" cy="112" rx="88" ry="22"/>
-							<path class="body" d="M100 30c-8 0-12 6-12 14 0 6 3 9 3 12-14 4-38 10-44 22-2 4 0 8 4 10l20-4c0 30-4 52-6 70 10 6 26 9 35 9s25-3 35-9c-2-18-6-40-6-70l20 4c4-2 6-6 4-10-6-12-30-18-44-22 0-3 3-6 3-12 0-8-4-14-12-14z"/>
-							<path class="shirt" d="M91 56c-14 4-38 10-44 22-2 4 0 8 4 10l20-4c0 14-1 26-2 36 10 4 21 6 31 6s21-2 31-6c-1-10-2-22-2-36l20 4c4-2 6-6 4-10-6-12-30-18-44-22-2 5-5 8-9 8s-7-3-9-8z"/>
-							<path class="body" d="M100 179v50M74 234h52"/>
-							<ellipse class="ring" clip-path="url(#front)" cx="100" cy="112" rx="88" ry="22"/>
-						</svg>
+		<div class="demo">
+			<div class="screen">
+				<div class="stage" id="stage" tabindex="0" role="img" aria-label="Concept demo of a 3D try-on. Drag, or use the arrow keys, to turn the model.">
+					<canvas id="tryon"></canvas>
+					<span class="label" aria-hidden="true">Concept demo</span>
+					<span class="tag360" aria-hidden="true">360°</span>
+					<span class="hint" aria-hidden="true">&harr; Drag to turn</span>
+				</div>
+				<div class="panel">
+					<div class="tabs" role="tablist" aria-label="Clothing type">
+						<button type="button" role="tab" data-cat="top" aria-selected="true">Top</button>
+						<button type="button" role="tab" data-cat="bottom" aria-selected="false">Bottom</button>
+						<button type="button" role="tab" data-cat="shoes" aria-selected="false">Shoes</button>
+						<button type="button" role="tab" data-cat="coat" aria-selected="false">Coat</button>
 					</div>
-					<div class="item">
-						<span class="sw"></span>
-						<div><b>Linen shirt</b><span>From an online store</span></div>
-						<span class="fit">Size M fits</span>
+					<div class="row">
+						<div class="picks" id="picks" role="group" aria-label="Choose a piece"></div>
 					</div>
-					<div class="item">
-						<span class="sw" style="background: var(--sage)"></span>
-						<div><b>Goes with 4 items</b><span>Already in your wardrobe</span></div>
+					<div class="row">
+						<div class="sizes" id="sizes" role="group" aria-label="Size"></div>
+						<span class="fit good" id="fit" aria-live="polite">Fits you</span>
 					</div>
+					<p class="note">Concept demo for illustration only. The real app will show your own body and clothes from your scans.</p>
 				</div>
 			</div>
 		</div>
+
+		<div class="act"><a class="cta" href="#signup">Get notified at launch <span aria-hidden="true">&rarr;</span></a></div>
 	</main>
 </div>
 
@@ -147,45 +216,391 @@
 <div class="wrap">
 
 	<section id="problem">
-		<p class="kicker">Sound familiar?</p>
-		<h2>Choosing clothes is still a guess.</h2>
-		<div class="grid">
-			<div class="card stat"><b>88%</b><p>put off online orders because they don't know the size, how it looks on them, or what it goes with.</p></div>
-			<div class="card stat"><b>83%</b><p>found a piece in their wardrobe that they had completely forgotten about.</p></div>
-			<div class="card stat"><b>64%</b><p>often ask themselves "do I have anything to wear this with?" when they see new clothes.</p></div>
+		<span class="kicker">The problem</span>
+		<h2>Sound familiar?</h2>
+		<div class="stats">
+			<div class="stat"><b>88%</b><p>put off online orders, unsure how it fits</p></div>
+			<div class="stat"><b>83%</b><p>forgot clothes they already own</p></div>
+			<div class="stat"><b>64%</b><p>wonder "what do I wear this with?"</p></div>
 		</div>
-		<p class="source">From our survey of 64 people, 2026.</p>
+		<p class="source">Our survey of 64 people, 2026</p>
 	</section>
 
 	<section id="how">
-		<p class="kicker">How it works</p>
-		<h2>Your wardrobe, in 3D, in three steps.</h2>
-		<div class="grid">
-			<div class="card step"><span class="n">1</span><h3>Build your model</h3><p>Scan your body with your phone, or just enter your sizes.</p></div>
-			<div class="card step"><span class="n">2</span><h3>Scan your clothes</h3><p>Hold a piece in front of the camera and turn it around. It joins your wardrobe in 3D.</p></div>
-			<div class="card step"><span class="n">3</span><h3>Try on outfits</h3><p>Mix your pieces on your 3D model and look at them from every side.</p></div>
+		<span class="kicker">How it works</span>
+		<h2>Three steps. No changing rooms.</h2>
+		<div class="steps">
+			<div class="step">
+				<div class="art">
+					<svg class="ill" viewBox="0 0 200 150" aria-hidden="true">
+						<rect class="wh" x="62" y="10" width="76" height="130" rx="14"/>
+						<rect class="ln" x="62" y="10" width="76" height="130" rx="14"/>
+						<circle class="ln" cx="100" cy="42" r="9"/>
+						<path class="ln" d="M100 51v40M82 64l18 8 18-8M88 122l12-31 12 31"/>
+						<g style="transform: translateY(75px)"><path class="scan" d="M70 0h60"/></g>
+					</svg>
+				</div>
+				<div class="cap"><span class="n">1</span><h3>Scan your body</h3></div>
+			</div>
+			<div class="step">
+				<div class="art">
+					<svg class="ill" viewBox="0 0 200 150" aria-hidden="true">
+						<path class="yl" d="M84 38c-10 3-24 8-28 15-1 3 0 6 3 7l13-3v52h56V57l13 3c3-1 4-4 3-7-4-7-18-12-28-15-2 5-6 8-11 8s-9-3-11-8z"/>
+						<path class="ln" d="M84 38c-10 3-24 8-28 15-1 3 0 6 3 7l13-3v52h56V57l13 3c3-1 4-4 3-7-4-7-18-12-28-15-2 5-6 8-11 8s-9-3-11-8z"/>
+						<ellipse class="ln spin" cx="100" cy="80" rx="80" ry="18" stroke-dasharray="10 7" style="stroke: #fff"/>
+						<path class="ln" d="M172 74l8 6-10 3" style="stroke: #fff"/>
+					</svg>
+				</div>
+				<div class="cap"><span class="n">2</span><h3>Scan your clothes</h3></div>
+			</div>
+			<div class="step">
+				<div class="art">
+					<svg class="ill" viewBox="0 0 200 150" aria-hidden="true">
+						<circle cx="100" cy="30" r="10" fill="#fff" stroke="#1c261f" stroke-width="2.5"/>
+						<path d="M92 44c-9 3-22 7-26 13-1 3 0 5 3 6l11-2v34c6 3 13 4 20 4s14-1 20-4V61l11 2c3-1 4-3 3-6-4-6-17-10-26-13-2 4-4 6-8 6s-6-2-8-6z" fill="#f2c94c" stroke="#1c261f" stroke-width="2.5" stroke-linejoin="round"/>
+						<path d="M84 99l-2 34h14l4-28 4 28h14l-2-34z" fill="#3c5675" stroke="#1c261f" stroke-width="2.5" stroke-linejoin="round"/>
+						<ellipse class="spin" cx="100" cy="138" rx="56" ry="9" fill="none" stroke="#f2c94c" stroke-width="3" stroke-dasharray="10 7"/>
+					</svg>
+				</div>
+				<div class="cap"><span class="n">3</span><h3>Try on in 3D</h3></div>
+			</div>
 		</div>
+		<p class="swipe" aria-hidden="true">Swipe to see all three &rarr;</p>
 	</section>
 
-	<section id="features">
-		<p class="kicker">What you can do</p>
-		<h2>Get dressed and shop with confidence.</h2>
-		<div class="grid features">
-			<div class="card"><h3>Try before you buy</h3><p>See how a piece from an online store fits your body before you order it, and return less.</p></div>
-			<div class="card"><h3>See it with what you own</h3><p>Check what a new piece goes with in your wardrobe before you buy it.</p></div>
-			<div class="card"><h3>Never forget a piece</h3><p>All your clothes in one place, sorted by category and season, like your real wardrobe.</p></div>
-			<div class="card"><h3>Build outfits in seconds</h3><p>Pick a top, bottoms and shoes, and see the whole outfit on you without changing clothes.</p></div>
-		</div>
+	<section id="signup" class="signup">
+		<span class="kicker">Coming soon</span>
+		<h2>Be the first to try EasyFits.</h2>
+		<p>One email when we launch. That's it.</p>
+		<form id="signup-form" novalidate>
+			<input id="email" name="email" type="email" aria-label="Email address" placeholder="you@email.com" autocomplete="email" required>
+			<button class="cta" type="submit">Notify me <span aria-hidden="true">&rarr;</span></button>
+		</form>
+		<p class="msg" id="signup-msg" role="status" aria-live="polite"></p>
+		<ul class="badges">
+			<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>Real scans, not AI images</li>
+			<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Delete your scans anytime</li>
+		</ul>
 	</section>
-
-	<div class="trust">
-		<div><h3>Real scans, not AI-generated pictures</h3><p>What you see is built from scans of your body and your clothes, so it stays true to the real thing.</p></div>
-		<div><h3>Your scans stay yours</h3><p>You decide what is stored, and you can delete your scans at any time.</p></div>
-	</div>
 
 </div>
 
 <footer><div class="wrap">EasyFits &middot; 2026</div></footer>
 
+<script>
+/* ---- Sign-up: sends the email to a Google Form ----
+   Fill in both values from your Google Form:
+   action:     https://docs.google.com/forms/d/e/<FORM-ID>/formResponse
+   emailField: the email question's entry id, e.g. "entry.123456789"  */
+const GOOGLE_FORM = { action: '', emailField: '' };
+
+const form = document.getElementById('signup-form');
+const email = document.getElementById('email');
+const msg = document.getElementById('signup-msg');
+
+form.addEventListener('submit', async e => {
+	e.preventDefault();
+	if (!email.checkValidity()) { msg.textContent = 'Please enter a valid email address.'; email.focus(); return; }
+	if (!GOOGLE_FORM.action || !GOOGLE_FORM.emailField) { msg.textContent = 'Sign-up is not connected yet.'; return; }
+	const button = form.querySelector('button');
+	button.disabled = true;
+	try {
+		// Google Forms does not allow reading the reply (no-cors), so a sent request counts as success.
+		await fetch(GOOGLE_FORM.action, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ [GOOGLE_FORM.emailField]: email.value.trim() }) });
+		form.hidden = true;
+		msg.textContent = "Thanks! We'll email you when EasyFits launches.";
+	} catch {
+		msg.textContent = 'Something went wrong. Please try again.';
+		button.disabled = false;
+	}
+});
+</script>
+
+<script type="importmap">{ "imports": {
+	"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+	"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }</script>
+<script type="module">
+/* ---- Concept demo: a 3D mannequin you can turn, dress and resize ---- */
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// Pieces per clothing type. store: true = from an online store (has sizes), false = already in your wardrobe.
+const CATS = {
+	top: { sizes: ['S', 'M', 'L'], items: [
+		{ name: 'Linen tee', color: '#f2c94c', kind: 'tee', store: true, ideal: 1 },
+		{ name: 'Denim jacket', color: '#4f6f8f', kind: 'jacket', store: true, ideal: 2 },
+		{ name: 'My sweater', color: '#d98a6a', kind: 'sweater', store: false }
+	] },
+	bottom: { sizes: ['S', 'M', 'L'], items: [
+		{ name: 'My jeans', color: '#3c5675', kind: 'jeans', store: false },
+		{ name: 'Chinos', color: '#cdb48e', kind: 'chinos', store: true, ideal: 1 },
+		{ name: 'Shorts', color: '#6f7b4f', kind: 'shorts', store: true, ideal: 0 }
+	] },
+	shoes: { sizes: null, items: [
+		{ name: 'Sneakers', color: '#f4f2ec', kind: 'sneakers', store: true },
+		{ name: 'My boots', color: '#6b4a35', kind: 'boots', store: false },
+		{ name: 'Loafers', color: '#26282c', kind: 'loafers', store: true }
+	] },
+	coat: { sizes: ['S', 'M', 'L'], items: [
+		{ name: 'No coat', color: 'transparent', kind: 'none', none: true },
+		{ name: 'Trench coat', color: '#c8a97e', kind: 'trench', store: true, ideal: 1 },
+		{ name: 'Puffer', color: '#d65a3a', kind: 'puffer', store: true, ideal: 2 }
+	] }
+};
+const SIZE_SCALE = [0.95, 1, 1.07];
+
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('tryon');
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+catch { stage.classList.add('nogl'); }
+
+if (renderer) {
+	renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+	renderer.toneMappingExposure = 1;
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+	const scene = new THREE.Scene();
+	scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(renderer), 0.04).texture;
+	const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 20);
+
+	scene.add(new THREE.HemisphereLight(0xffffff, 0x3f5c4c, .5));
+	const key = new THREE.DirectionalLight(0xffffff, 1.6);
+	key.position.set(1.5, 3.5, 2.5);
+	key.castShadow = true;
+	key.shadow.mapSize.set(1024, 1024);
+	Object.assign(key.shadow.camera, { left: -1, right: 1, top: 2, bottom: -.2, near: .5, far: 8 });
+	scene.add(key);
+	const rim = new THREE.DirectionalLight(0xfff1c4, 1.1); rim.position.set(-2.5, 2, -3); scene.add(rim);
+
+	const floor = new THREE.Mesh(new THREE.CircleGeometry(1.2, 64), new THREE.ShadowMaterial({ opacity: .3 }));
+	floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+	// ---- Geometry helpers ----
+	const smooth = pts => new THREE.SplineCurve(pts.map(([r, y]) => new THREE.Vector2(r, y))).getPoints(56).map(p => new THREE.Vector2(Math.max(p.x, 0), p.y));
+	// Round shape from a (radius, height) profile, flattened front to back (depth)
+	const lathe = (pts, depth = 1) => { const g = new THREE.LatheGeometry(smooth(pts), 64); g.scale(1, 1, depth); g.computeVertexNormals(); return g; };
+	// Rounded, tapered limb centred on its own origin
+	const limb = (rTop, rBot, len) => { const h = len / 2; return lathe([[0, -h - rBot * .6], [rBot * .8, -h - rBot * .35], [rBot, -h], [(rTop + rBot) / 2, 0], [rTop, h], [rTop * .8, h + rTop * .35], [0, h + rTop * .6]]); };
+	const egg = (rx, ry, rz) => { const g = new THREE.SphereGeometry(1, 40, 28); g.scale(rx, ry, rz); return g; };
+	const torus = (r, tube, depth = 1) => { const g = new THREE.TorusGeometry(r, tube, 12, 64); g.rotateX(Math.PI / 2); g.scale(1, 1, depth); return g; };
+	const add = (parent, geo, m, x = 0, y = 0, z = 0) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); parent.add(o); return o; };
+
+	const skin = new THREE.MeshPhysicalMaterial({ color: '#f3efe8', roughness: .38, clearcoat: .5, clearcoatRoughness: .35 });
+	const fabric = c => new THREE.MeshPhysicalMaterial({ color: c, roughness: .88, sheen: .8, sheenRoughness: .5, sheenColor: new THREE.Color(c).lerp(new THREE.Color('#ffffff'), .45), side: THREE.DoubleSide });
+	const shade = (c, k) => new THREE.Color(c).multiplyScalar(k);
+	const solid = (c, rough = .5) => new THREE.MeshStandardMaterial({ color: c, roughness: rough });
+
+	// ---- Mannequin (about 1.78 m tall) ----
+	const model = new THREE.Group();
+	scene.add(model);
+	const TORSO_DEPTH = .68;
+	add(model, lathe([[0, .84], [.12, .84], [.175, .88], [.195, .95], [.19, 1.02], [.165, 1.1], [.152, 1.17], [.165, 1.25], [.19, 1.32], [.2, 1.37], [.18, 1.42], [.11, 1.46], [.055, 1.48], [0, 1.485]], TORSO_DEPTH), skin);
+	add(model, limb(.044, .05, .1), skin, 0, 1.515);
+	add(model, egg(.093, .122, .103), skin, 0, 1.655);
+
+	const TILT = .13;
+	const arms = [-1, 1].map(s => {
+		const g = new THREE.Group(); g.position.set(s * .205, 1.37, 0); g.rotation.z = s * TILT; model.add(g);
+		add(g, egg(.058, .058, .058), skin);
+		add(g, limb(.05, .04, .27), skin, 0, -.16);
+		add(g, limb(.04, .033, .25), skin, 0, -.44);
+		add(g, egg(.03, .055, .022), skin, 0, -.61);
+		return g;
+	});
+	const legs = [-1, 1].map(s => {
+		const g = new THREE.Group(); g.position.set(s * .088, .86, 0); g.rotation.z = s * .02; model.add(g);
+		add(g, limb(.082, .058, .4), skin, 0, -.22);
+		add(g, limb(.056, .038, .36), skin, 0, -.62);
+		return g;
+	});
+
+	// Dashed yellow ring on the floor (as on the Fiki), turning with the model
+	const ringM = new THREE.MeshBasicMaterial({ color: '#f2c94c', side: THREE.DoubleSide });
+	for (let i = 0; i < 36; i++) {
+		const d = add(model, new THREE.RingGeometry(.5, .525, 6, 1, i * Math.PI / 18, Math.PI / 30), ringM, 0, .004);
+		d.rotation.x = -Math.PI / 2;
+	}
+
+	// ---- Clothes: every piece gets its own groups on the body, both arms and both legs ----
+	function slots() {
+		const s = { body: new THREE.Group(), arms: arms.map(a => a.add(new THREE.Group()).children.at(-1)), legs: legs.map(l => l.add(new THREE.Group()).children.at(-1)) };
+		model.add(s.body);
+		s.all = [s.body, ...s.arms, ...s.legs];
+		return s;
+	}
+	const sleeves = (s, m, pts) => s.arms.forEach(a => add(a, lathe(pts), m));
+	const pantLegs = (s, m, pts) => s.legs.forEach(l => add(l, lathe(pts), m));
+
+	const BUILD = {
+		tee(s, c) {
+			const m = fabric(c);
+			add(s.body, lathe([[.222, .93], [.214, 1], [.184, 1.1], [.17, 1.17], [.183, 1.25], [.207, 1.32], [.218, 1.37], [.198, 1.425], [.12, 1.47], [.07, 1.49]], TORSO_DEPTH), m);
+			add(s.body, torus(.072, .011, TORSO_DEPTH), m, 0, 1.484);
+			sleeves(s, m, [[.066, -.2], [.068, -.12], [.07, -.03], [.06, .03], [.04, .06]]);
+		},
+		sweater(s, c) {
+			const m = fabric(c), rib = fabric(shade(c, .82));
+			add(s.body, lathe([[.23, .9], [.224, .95], [.206, 1.05], [.18, 1.15], [.19, 1.25], [.212, 1.32], [.224, 1.37], [.205, 1.43], [.125, 1.475], [.075, 1.5]], TORSO_DEPTH), m);
+			add(s.body, torus(.227, .02, TORSO_DEPTH), rib, 0, .905);
+			add(s.body, torus(.077, .017, TORSO_DEPTH), rib, 0, 1.495);
+			sleeves(s, m, [[.05, -.6], [.056, -.55], [.062, -.4], [.066, -.2], [.07, -.03], [.06, .04], [.04, .065]]);
+			s.arms.forEach(a => add(a, torus(.052, .013), rib, 0, -.585));
+		},
+		jacket(s, c) {
+			const m = fabric(c), dark = fabric(shade(c, .72)), button = solid('#c9a46a', .3);
+			add(s.body, lathe([[.236, .8], [.233, .88], [.222, .98], [.2, 1.08], [.193, 1.17], [.205, 1.26], [.226, 1.33], [.237, 1.375], [.216, 1.435], [.14, 1.48], [.085, 1.505]], TORSO_DEPTH), m);
+			add(s.body, torus(.09, .026, TORSO_DEPTH), dark, 0, 1.49);
+			add(s.body, torus(.234, .012, TORSO_DEPTH), dark, 0, .81);
+			for (const [y, r] of [[1.24, .205], [1.1, .198], [.96, .225]]) add(s.body, egg(.011, .011, .006), button, 0, y, r * TORSO_DEPTH + .004);
+			sleeves(s, m, [[.054, -.58], [.06, -.53], [.065, -.4], [.069, -.2], [.073, -.03], [.062, .045], [.04, .07]]);
+			s.arms.forEach(a => add(a, torus(.056, .012), dark, 0, -.57));
+		},
+		jeans(s, c) {
+			const m = fabric(c);
+			add(s.body, lathe([[0, .78], [.12, .79], [.185, .85], [.204, .92], [.2, .99], [.196, 1.0]], TORSO_DEPTH), m);
+			pantLegs(s, m, [[.074, -.8], [.078, -.6], [.085, -.4], [.094, -.2], [.1, -.05], [.1, .03]]);
+		},
+		chinos(s, c) {
+			const m = fabric(c);
+			add(s.body, lathe([[0, .78], [.12, .79], [.185, .85], [.204, .92], [.2, .99], [.196, 1.0]], TORSO_DEPTH), m);
+			pantLegs(s, m, [[.066, -.74], [.068, -.6], [.078, -.4], [.09, -.2], [.098, -.05], [.098, .03]]);
+			s.legs.forEach(l => add(l, torus(.067, .012), m, 0, -.737));
+		},
+		shorts(s, c) {
+			const m = fabric(c);
+			add(s.body, lathe([[0, .78], [.12, .79], [.185, .85], [.206, .92], [.202, .99], [.198, 1.0]], TORSO_DEPTH), m);
+			pantLegs(s, m, [[.104, -.32], [.104, -.2], [.104, -.05], [.1, .03]]);
+		},
+		sneakers(s, c) {
+			const up = solid(c, .55), sole = solid('#e2ddd2', .7), stripe = solid('#f2c94c', .4);
+			s.legs.forEach(l => {
+				add(l, egg(.056, .046, .122), up, 0, -.808, .032);
+				add(l, egg(.061, .019, .132), sole, 0, -.846, .036);
+				add(l, egg(.057, .012, .07), stripe, 0, -.8, .03);
+			});
+		},
+		boots(s, c) {
+			const m = solid(c, .45), sole = solid('#2a1f18', .7);
+			s.legs.forEach(l => {
+				add(l, limb(.058, .056, .16), m, 0, -.75);
+				add(l, egg(.06, .048, .126), m, 0, -.812, .03);
+				add(l, egg(.064, .017, .134), sole, 0, -.849, .034);
+			});
+		},
+		loafers(s, c) {
+			const m = solid(c, .32), sole = solid('#5a4636', .7);
+			s.legs.forEach(l => {
+				add(l, egg(.052, .034, .118), m, 0, -.83, .035);
+				add(l, egg(.056, .012, .124), sole, 0, -.851, .036);
+			});
+		},
+		none() {},
+		// Coats sit over every top, so they are a little wider than the denim jacket
+		trench(s, c) {
+			const m = fabric(c), dark = fabric(shade(c, .7)), button = solid('#3a2c20', .4), D = .72;
+			add(s.body, lathe([[.3, .46], [.29, .6], [.27, .75], [.256, .88], [.247, 1], [.238, 1.1], [.243, 1.2], [.26, 1.3], [.274, 1.37], [.252, 1.44], [.17, 1.49], [.1, 1.52]], D), m);
+			add(s.body, torus(.248, .018, D), dark, 0, 1.0);
+			add(s.body, torus(.11, .03, D), m, 0, 1.495);
+			add(s.body, torus(.299, .012, D), dark, 0, .465);
+			for (const y of [1.22, 1.1]) for (const x of [-.05, .05]) add(s.body, egg(.012, .012, .007), button, x, y, .243 * D + .006);
+			sleeves(s, m, [[.062, -.6], [.07, -.55], [.076, -.4], [.08, -.2], [.084, -.03], [.072, .05], [.05, .08]]);
+			s.arms.forEach(a => add(a, torus(.066, .014), dark, 0, -.53));
+		},
+		puffer(s, c) {
+			const m = new THREE.MeshPhysicalMaterial({ color: c, roughness: .55, clearcoat: .3, clearcoatRoughness: .5, side: THREE.DoubleSide }), D = .74;
+			add(s.body, lathe([[.27, .8], [.285, .84], [.272, .9], [.29, .96], [.275, 1.02], [.292, 1.08], [.277, 1.14], [.292, 1.2], [.279, 1.26], [.292, 1.32], [.283, 1.38], [.256, 1.44], [.18, 1.49], [.12, 1.53]], D), m);
+			add(s.body, lathe([[.13, 1.47], [.128, 1.52], [.124, 1.58]], D), m);
+			add(s.body, torus(.272, .02, D), m, 0, .805);
+			sleeves(s, m, [[.07, -.58], [.085, -.5], [.078, -.42], [.092, -.34], [.083, -.26], [.095, -.18], [.087, -.1], [.097, -.02], [.08, .06], [.05, .09]]);
+		}
+	};
+	for (const cat of Object.values(CATS)) for (const item of cat.items) { item.slots = slots(); BUILD[item.kind](item.slots, item.color); }
+	model.traverse(o => { if (o.isMesh && o.material !== ringM) o.castShadow = true; });
+
+	// ---- Controls ----
+	const chosen = { top: 0, bottom: 0, shoes: 0, coat: 0 };
+	const size = { top: 1, bottom: 1, shoes: 1, coat: 1 };
+	let cat = 'top';
+	const tabs = document.querySelectorAll('.tabs button');
+	const picksEl = document.getElementById('picks'), sizesEl = document.getElementById('sizes'), fitEl = document.getElementById('fit');
+
+	function dress() {
+		for (const [c, { items }] of Object.entries(CATS)) items.forEach((item, i) => {
+			const on = i === chosen[c], k = SIZE_SCALE[size[c]];
+			item.slots.all.forEach(g => { g.visible = on; g.scale.set(k, 1, k); });
+		});
+	}
+	function ui() {
+		const { sizes, items } = CATS[cat], item = items[chosen[cat]];
+		tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.cat === cat));
+		picksEl.innerHTML = items.map((it, i) => `<button type="button" class="pick" data-i="${i}" aria-pressed="${i === chosen[cat]}"><i style="background:${it.color}"></i>${it.name}</button>`).join('');
+		sizesEl.innerHTML = (sizes || ['M']).map((s, i) => `<button type="button" data-s="${i}" aria-pressed="${i === size[cat]}">${s}</button>`).join('');
+		sizesEl.classList.toggle('off', !item.store || !sizes);
+		const [cls, text] = item.none ? ['own', 'No coat on']
+			: !item.store ? ['own', 'Already yours']
+			: !sizes ? ['own', 'From an online store']
+			: size[cat] < item.ideal ? ['tight', 'Too tight'] : size[cat] > item.ideal ? ['loose', 'A bit loose'] : ['good', 'Fits you'];
+		fitEl.className = 'fit ' + cls;
+		fitEl.textContent = text;
+	}
+	tabs.forEach(t => t.addEventListener('click', () => { cat = t.dataset.cat; ui(); }));
+	picksEl.addEventListener('click', e => {
+		const b = e.target.closest('.pick'); if (!b) return;
+		chosen[cat] = +b.dataset.i;
+		const item = CATS[cat].items[chosen[cat]];
+		size[cat] = item.ideal ?? 1;
+		dress(); ui();
+	});
+	sizesEl.addEventListener('click', e => {
+		const b = e.target.closest('button'); if (!b) return;
+		size[cat] = +b.dataset.s; dress(); ui();
+	});
+	dress(); ui();
+
+	// ---- Turning: drag (with momentum) or arrow keys; slow turn when idle ----
+	let dragging = false, lastX = 0, vel = 0, idleUntil = 0;
+	const nudge = () => { stage.classList.add('used'); idleUntil = performance.now() + 2500; };
+	stage.addEventListener('pointerdown', e => { dragging = true; lastX = e.clientX; vel = 0; stage.setPointerCapture(e.pointerId); nudge(); });
+	stage.addEventListener('pointermove', e => { if (!dragging) return; vel = (e.clientX - lastX) * .012; model.rotation.y += vel; lastX = e.clientX; });
+	['pointerup', 'pointercancel'].forEach(t => stage.addEventListener(t, () => { dragging = false; nudge(); }));
+	stage.addEventListener('keydown', e => {
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+		vel = e.key === 'ArrowLeft' ? -.08 : .08; nudge(); e.preventDefault();
+	});
+
+	// Keep the whole body in view whatever the shape of the stage
+	function resize() {
+		const w = stage.clientWidth, h = stage.clientHeight;
+		renderer.setSize(w, h, false);
+		camera.aspect = w / h;
+		const notch = matchMedia('(min-width: 861px)').matches ? .32 : 0; // room for the phone frame's notch
+		const fitH = 2.15 + notch, dist = fitH / 2 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+		camera.position.set(0, 1.0 + notch / 2, dist);
+		camera.lookAt(0, .88 + notch / 2, 0);
+		camera.updateProjectionMatrix();
+	}
+	new ResizeObserver(resize).observe(stage);
+	resize();
+
+	let visible = true;
+	new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(stage);
+
+	model.rotation.y = -.5;
+	renderer.setAnimationLoop(now => {
+		if (!visible) return;
+		if (!dragging) {
+			if (Math.abs(vel) > .0005) { model.rotation.y += vel; vel *= .93; }
+			else if (!still && now > idleUntil) model.rotation.y += .004;
+		}
+		renderer.render(scene, camera);
+	});
+}
+</script>
 </body>
 </html>
